@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Service UI</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Product Service</h1>
+            <input type="text" id="searchBar" placeholder="Search Products..." onkeyup="searchProducts()">
+        </header>
+
+        <section id="product-list" class="product-list">
+        </section>
+
+        <div id="product-details" class="product-details">
+            <button onclick="closeDetails()">Close</button>
+            <h2 id="product-name"></h2>
+            <p id="product-description"></p>
+            <p id="product-price"></p>
+        </div>
+
+        <div class="form">
+            <input type="text" id="name" placeholder="Product Name" />
+            <textarea id="description" placeholder="Description"></textarea>
+            <input type="text" id="images" placeholder="Image URL (comma separated)" />
+            <input type="text" id="category" placeholder="Category" />
+            <input type="number" id="quantity" placeholder="Quantity" />
+            <input type="number" id="rating" placeholder="Rating (Only in Update)" />
+            <button onclick="addOrUpdateProduct()">Save Product</button>
+        </div>
+    </div>
+
+
+
+    <div id="productList" class="product-list"></div>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

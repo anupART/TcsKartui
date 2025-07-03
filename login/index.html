@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <div class="form">
+        <h2>Admin Login</h2>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Login</button>
+        <p id="loginError" style="color:red;"></p>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // 🔐 Step 1: CURRENT HARDCODED CHECK
+            if (username === "admin" && password === "admin123") {
+                window.location.href = "../product-service/index.html";
+            } else {
+                document.getElementById("loginError").innerText = "Invalid credentials";
+            }
+
+            // 🚀 FUTURE STEP 2: USE JWT FROM BACKEND
+            /*
+            fetch("http://localhost:8080/api/auth/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password })
+            })
+            .then(res => {
+              if (!res.ok) {
+                throw new Error("Invalid credentials");
+              }
+              return res.json();
+            })
+            .then(data => {
+              localStorage.setItem("token", data.token); // save JWT
+              localStorage.setItem("role", data.role);   // save role
+
+              if (data.role === "ADMIN") {
+                window.location.href = "index.html"; // redirect to product UI
+              } else {
+                document.getElementById("loginError").innerText = "Access Denied";
+              }
+            })
+            .catch(err => {
+              document.getElementById("loginError").innerText = err.message;
+            });
+           */
+        }
+    </script>
+
+    // </script>
+</body>
+
+</html>
