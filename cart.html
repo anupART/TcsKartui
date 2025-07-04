@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="container">
+      <h2>Cart Management</h2>
+      <input type="text" id="cartEmail" placeholder="Enter your email">
+      <button onclick="getCart()">Get Cart</button>
+
+      <div id="cartItems"></div>
+
+      <h3>Add Product to Cart</h3>
+      <input type="number" id="productId" placeholder="Product ID">
+      <input type="number" id="quantity" placeholder="Quantity">
+      <button onclick="addProductToCart()">Add to Cart</button>
+    </div>
+  </div>
+
+  <script src="js/cart.js"></script>
+</body>
+</html>

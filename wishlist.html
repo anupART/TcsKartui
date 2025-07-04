@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="container">
+      <h2>Wishlist Management</h2>
+      <input type="text" id="wishlistEmail" placeholder="Enter your email">
+      <button onclick="getWishlist()">View Wishlist</button>
+
+      <div id="wishlistItems"></div>
+
+      <h3>Add Product to Wishlist</h3>
+      <input type="number" id="wishProductId" placeholder="Product ID">
+      <button onclick="addProductToWishlist()">Add to Wishlist</button>
+    </div>
+  </div>
+
+  <script src="js/wishlist.js"></script>
+</body>
+</html>
