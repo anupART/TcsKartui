@@ -1,14 +1,19 @@
-let products = [{
-    id: 1,
-    name: "Red T-shirt",
-    description: "A bright red cotton T-shirt",
-    images: ["https://via.placeholder.com/220"],
-    category: "Clothing",
-    quantity: 10,
-    rating: 4.2
-}];
+// --- Connect JS UI with Spring Boot backend (ProductController) ---
 
+const apiBaseUrl = "http://localhost:8080/api/v1.0"; // Update this when deployed
+
+let products = [];
 let editingId = null;
+
+function fetchProducts() {
+    fetch(`${apiBaseUrl}/product`)
+        .then(res => res.json())
+        .then(data => {
+            products = data;
+            renderProducts();
+        })
+        .catch(err => console.error("Error fetching products:", err));
+}
 
 function renderProducts() {
     const list = document.getElementById("productList");
@@ -19,14 +24,15 @@ function renderProducts() {
         card.className = "product-card";
 
         card.innerHTML = `
-        <img src="${product.images[0] || 'https://via.placeholder.com/220'}" alt="${product.name}" />
+        <img src="${product.images?.[0] || 'https://via.placeholder.com/220'}" alt="${product.name}" />
         <h3>${product.name}</h3>
-        <p><b>Category:</b> ${product.category}</p>
+        <p><b>Category:</b> ${product.productCategory || product.category}</p>
         <p><b>Qty:</b> ${product.quantity}</p>
         <p><b>Rating:</b> ${product.rating || 'N/A'}</p>
         <button class="update-btn" onclick="fillForm(${product.id})">Update</button>
         <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
       `;
+
         list.appendChild(card);
     });
 }
@@ -39,31 +45,40 @@ function addOrUpdateProduct() {
     const quantity = parseInt(document.getElementById("quantity").value);
     const rating = parseFloat(document.getElementById("rating").value) || null;
 
-    if (!name || !description || !images.length || !category || isNaN(quantity)) {
+    if (!name || !description || !category || isNaN(quantity)) {
         return alert("Please fill all required fields.");
     }
 
-    const productData = { name, description, images, category, quantity, rating };
+    const payload = {
+        name,
+        description,
+        images,
+        productCategory: category,
+        quantity,
+        rating
+    };
 
     if (editingId !== null) {
-        const index = products.findIndex(p => p.id === editingId);
-        products[index] = {...products[index], ...productData };
-        editingId = null;
+        fetch(`${apiBaseUrl}/product`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: editingId, ...payload })
+            })
+            .then(() => {
+                clearForm();
+                fetchProducts();
+            });
     } else {
-        products.push({ id: Date.now(), ...productData });
+        fetch(`${apiBaseUrl}/product`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                clearForm();
+                fetchProducts();
+            });
     }
-
-    clearForm();
-    renderProducts();
-
-    // For backend (commented):
-    /*
-    fetch("http://localhost:8080/api/products/add", {
-      method: editingId ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(productData)
-    }).then(() => renderProducts());
-    */
 }
 
 function fillForm(id) {
@@ -72,8 +87,8 @@ function fillForm(id) {
 
     document.getElementById("name").value = product.name;
     document.getElementById("description").value = product.description;
-    document.getElementById("images").value = product.images.join(", ");
-    document.getElementById("category").value = product.category;
+    document.getElementById("images").value = product.images ? .join(", ") || "";
+    document.getElementById("category").value = product.productCategory || product.category;
     document.getElementById("quantity").value = product.quantity;
     document.getElementById("rating").value = product.rating || "";
 
@@ -82,11 +97,8 @@ function fillForm(id) {
 
 function deleteProduct(id) {
     if (!confirm("Delete this product?")) return;
-    products = products.filter(p => p.id !== id);
-    renderProducts();
-
-    // For backend (commented):
-    // fetch(`http://localhost:8080/api/products/delete/id/${id}`, { method: "DELETE" });
+    fetch(`${apiBaseUrl}/product/${id}`, { method: "DELETE" })
+        .then(() => fetchProducts());
 }
 
 function clearForm() {
@@ -99,4 +111,5 @@ function clearForm() {
     editingId = null;
 }
 
-renderProducts();
+// Load products on page load
+window.onload = fetchProducts;
