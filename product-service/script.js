@@ -1,6 +1,4 @@
-// --- Connect JS UI with Spring Boot backend (ProductController) ---
-
-const apiBaseUrl = "http://localhost:8080/api/v1.0"; // Update this when deployed
+const apiBaseUrl = "http://localhost:8080/api/v1.0";
 
 let products = [];
 let editingId = null;
